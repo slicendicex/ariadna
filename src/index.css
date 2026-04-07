@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent scrolling for the full-screen 3D app */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #1a1a1a; /* Dark background to see the cube better */
+  color: #eee;
+}
+
+#root, .app-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.scene-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}

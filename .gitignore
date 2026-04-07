@@ -1,0 +1,57 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies / build
+node_modules/
+dist/
+dist-ssr/
+coverage/
+.vite/
+*.tsbuildinfo
+.eslintcache
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+*.local
+*.secret
+*.pem
+*.key
+*.p12
+*.crt
+*.cer
+
+# Temp / caches
+.cache/
+tmp/
+temp/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS / misc
+Desktop.ini
+desktop.ini
+
+# Optional: local tool noise
+# Keep AGENTS.md and .agents/ tracked
+# Keep repo-safe .codex/config.toml only if it contains no secrets
+.codex/*.local.toml
+.codex/local/
+.codex/cache/
