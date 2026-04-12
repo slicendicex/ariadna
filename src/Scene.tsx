@@ -8,17 +8,17 @@ interface SceneProps {
   nodes: NodeData[];
   edges: EdgeData[];
   selectedNodeId: string | null;
-  onSelectNode: (id: string | null) => void;
+  onNodeInteraction: (id: string | null) => void;
 }
 
 // The main Scene component: only renders the 3D world.
 // Selection state is owned by the parent (App).
-export default function Scene({ nodes, edges, selectedNodeId, onSelectNode }: SceneProps) {
+export default function Scene({ nodes, edges, selectedNodeId, onNodeInteraction }: SceneProps) {
   return (
     <div className="scene-container">
       <Canvas 
         camera={{ position: [0, 0, 5], fov: 50 }}
-        onPointerMissed={() => onSelectNode(null)}
+        onPointerMissed={() => onNodeInteraction(null)}
       >
         {/* Basic lighting */}
         <ambientLight intensity={0.5} />
@@ -48,7 +48,7 @@ export default function Scene({ nodes, edges, selectedNodeId, onSelectNode }: Sc
             position={node.position} 
             color={node.color} 
             isSelected={selectedNodeId === node.id}
-            onClick={() => onSelectNode(node.id)}
+            onClick={() => onNodeInteraction(node.id)}
           />
         ))}
       </Canvas>

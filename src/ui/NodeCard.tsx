@@ -4,10 +4,13 @@ import { MAX_NODE_TITLE_LENGTH } from '../constants/node';
 interface NodeCardProps {
   node: NodeData | null;
   onUpdateNode: (id: string, updates: Partial<NodeData>) => void;
+  isLinking: boolean;
+  onStartLink: () => void;
+  onCancelLink: () => void;
 }
 
 // Fixed DOM overlay panel showing info about the selected node
-export default function NodeCard({ node, onUpdateNode }: NodeCardProps) {
+export default function NodeCard({ node, onUpdateNode, isLinking, onStartLink, onCancelLink }: NodeCardProps) {
   if (!node) return null;
 
   return (
@@ -80,6 +83,25 @@ export default function NodeCard({ node, onUpdateNode }: NodeCardProps) {
             }}
           />
         </div>
+
+        <button
+          onClick={isLinking ? onCancelLink : onStartLink}
+          style={{
+            marginTop: '8px',
+            background: isLinking ? 'rgba(247, 37, 133, 0.2)' : 'rgba(76, 201, 240, 0.2)',
+            border: `1px solid ${isLinking ? 'rgba(247, 37, 133, 0.5)' : 'rgba(76, 201, 240, 0.5)'}`,
+            borderRadius: '4px',
+            padding: '6px 12px',
+            color: '#eee',
+            fontSize: '13px',
+            cursor: 'pointer',
+            fontFamily: 'inherit',
+            transition: 'background 0.15s',
+            width: '100%'
+          }}
+        >
+          {isLinking ? 'Cancel Link' : 'Start Link'}
+        </button>
       </div>
     </div>
   );
