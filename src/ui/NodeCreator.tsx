@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { MAX_NODE_TITLE_LENGTH } from '../constants/node';
 
 interface NodeCreatorProps {
   onAddNode: (title: string) => void;
@@ -43,6 +44,7 @@ export default function NodeCreator({ onAddNode }: NodeCreatorProps) {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Node title..."
+        maxLength={MAX_NODE_TITLE_LENGTH}
         style={{
           background: 'rgba(255,255,255,0.07)',
           border: '1px solid rgba(255,255,255,0.12)',

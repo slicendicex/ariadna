@@ -1,15 +1,19 @@
 import type { NodeData } from '../types/node';
+import { MAX_NODE_TITLE_LENGTH } from '../constants/node';
 
 interface NodeCardProps {
   node: NodeData | null;
+  onUpdateNode: (id: string, updates: Partial<NodeData>) => void;
 }
 
 // Fixed DOM overlay panel showing info about the selected node
-export default function NodeCard({ node }: NodeCardProps) {
+export default function NodeCard({ node, onUpdateNode }: NodeCardProps) {
   if (!node) return null;
 
   return (
-    <div style={{
+    <div 
+      onPointerDown={(e) => e.stopPropagation()}
+      style={{
       position: 'absolute',
       top: '16px',
       right: '16px',
@@ -19,16 +23,63 @@ export default function NodeCard({ node }: NodeCardProps) {
       padding: '12px 16px',
       color: '#eee',
       fontFamily: 'inherit',
-      minWidth: '160px',
-      pointerEvents: 'none',
+      minWidth: '220px',
+      pointerEvents: 'auto',
+      boxSizing: 'border-box'
     }}>
       <div style={{ fontSize: '11px', opacity: 0.5, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
         Node
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-        <Row label="Title" value={node.title} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '4px' }}>
+          <span style={{ opacity: 0.5, fontSize: '13px' }}>Title</span>
+          <input 
+            value={node.title} 
+            onChange={(e) => onUpdateNode(node.id, { title: e.target.value })}
+            onBlur={() => {
+              const trimmed = node.title.trim();
+              onUpdateNode(node.id, { title: trimmed ? trimmed : 'Untitled' });
+            }}
+            maxLength={MAX_NODE_TITLE_LENGTH}
+            style={{
+               background: 'rgba(255,255,255,0.07)',
+               border: '1px solid rgba(255,255,255,0.12)',
+               borderRadius: '4px',
+               padding: '6px 8px',
+               color: '#eee',
+               fontSize: '13px',
+               outline: 'none',
+               fontFamily: 'inherit',
+               width: '100%',
+               boxSizing: 'border-box'
+            }}
+          />
+        </div>
         <Row label="ID" value={node.id.slice(0, 8)} />
         <Row label="Color" value={node.colorName} accent={node.color} />
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
+          <span style={{ opacity: 0.5, fontSize: '13px' }}>Content</span>
+          <textarea
+            value={node.content}
+            onChange={(e) => onUpdateNode(node.id, { content: e.target.value })}
+            placeholder="Type your notes here..."
+            style={{
+               background: 'rgba(255,255,255,0.07)',
+               border: '1px solid rgba(255,255,255,0.12)',
+               borderRadius: '4px',
+               padding: '8px',
+               color: '#eee',
+               fontSize: '13px',
+               outline: 'none',
+               fontFamily: 'inherit',
+               width: '100%',
+               minHeight: '80px',
+               resize: 'vertical',
+               boxSizing: 'border-box'
+            }}
+          />
+        </div>
       </div>
     </div>
   );

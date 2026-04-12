@@ -6,6 +6,7 @@ export interface NodeData {
   color: string;
   colorName: string;
   title: string;
+  content: string;
 }
 
 export interface EdgeData {
