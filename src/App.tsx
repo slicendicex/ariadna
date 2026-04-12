@@ -18,42 +18,77 @@ const INITIAL_EDGES: EdgeData[] = [
   { id: 'e1-3', fromId: '1', toId: '3' },
 ];
 
+export type InteractionMode = 'none' | 'link' | 'delete_one';
+
 export default function App() {
   const [nodes, setNodes] = useState<NodeData[]>(INITIAL_NODES);
   const [edges, setEdges] = useState<EdgeData[]>(INITIAL_EDGES);
+  
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
-  const [linkingSourceId, setLinkingSourceId] = useState<string | null>(null);
+  const [interactionMode, setInteractionMode] = useState<InteractionMode>('none');
+  const [interactionSourceNodeId, setInteractionSourceNodeId] = useState<string | null>(null);
 
   const handleNodeInteraction = (id: string | null) => {
-    if (linkingSourceId) {
-      if (id === null) {
-        setLinkingSourceId(null);
+    // If clicking background
+    if (id === null) {
+      setInteractionMode('none');
+      setInteractionSourceNodeId(null);
+      setSelectedNodeId(null);
+      return;
+    }
+
+    // If an interaction mode is active
+    if (interactionMode !== 'none' && interactionSourceNodeId) {
+      // Prevent self-actions
+      if (id === interactionSourceNodeId) {
+        setInteractionMode('none');
+        setInteractionSourceNodeId(null);
+        // keep that node selected
         return;
       }
       
-      if (id !== linkingSourceId) {
+      if (interactionMode === 'link') {
         const isDuplicate = edges.some(
-          (e) => (e.fromId === linkingSourceId && e.toId === id) || (e.fromId === id && e.toId === linkingSourceId)
+          (e) => (e.fromId === interactionSourceNodeId && e.toId === id) || (e.fromId === id && e.toId === interactionSourceNodeId)
         );
-        
         if (!isDuplicate) {
-          setEdges((prev) => [...prev, { id: crypto.randomUUID(), fromId: linkingSourceId, toId: id }]);
+          setEdges((prev) => [...prev, { id: crypto.randomUUID(), fromId: interactionSourceNodeId, toId: id }]);
         }
+      } else if (interactionMode === 'delete_one') {
+        setEdges((prev) => prev.filter(
+          (e) => !((e.fromId === interactionSourceNodeId && e.toId === id) || (e.fromId === id && e.toId === interactionSourceNodeId))
+        ));
       }
       
-      setLinkingSourceId(null);
+      // End interaction mode and select the target node
+      setInteractionMode('none');
+      setInteractionSourceNodeId(null);
       setSelectedNodeId(id);
       return;
     }
     
+    // Normal selection
+    setInteractionMode('none');
+    setInteractionSourceNodeId(null);
     setSelectedNodeId(id);
   };
 
-  const startLink = () => {
-    if (selectedNodeId) setLinkingSourceId(selectedNodeId);
+  const startInteractionMode = (mode: InteractionMode) => {
+    if (selectedNodeId && mode !== 'none') {
+      setInteractionMode(mode);
+      setInteractionSourceNodeId(selectedNodeId);
+    } else {
+      setInteractionMode('none');
+      setInteractionSourceNodeId(null);
+    }
   };
 
-  const cancelLink = () => setLinkingSourceId(null);
+  const deleteAllLinks = () => {
+    if (!selectedNodeId) return;
+    setEdges((prev) => prev.filter((e) => e.fromId !== selectedNodeId && e.toId !== selectedNodeId));
+    setInteractionMode('none');
+    setInteractionSourceNodeId(null);
+  };
 
   // Find the full node object for the card — null if nothing is selected
   const selectedNode = nodes.find((n) => n.id === selectedNodeId) ?? null;
@@ -85,9 +120,9 @@ export default function App() {
       <NodeCard 
         node={selectedNode} 
         onUpdateNode={updateNode} 
-        isLinking={linkingSourceId !== null}
-        onStartLink={startLink}
-        onCancelLink={cancelLink}
+        interactionMode={interactionMode}
+        onSetInteractionMode={startInteractionMode}
+        onDeleteAllLinks={deleteAllLinks}
       />
       <NodeCreator onAddNode={addNode} />
     </div>
