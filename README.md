@@ -1,73 +1,41 @@
-# React + TypeScript + Vite
+# Ariadna 🧵
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ariadna is a browser-first prototype of a **3D / hierarchical thought-mapping interface**. 
 
-Currently, two official plugins are available:
+It is designed to be a calm, clean, and spatial tool for graph-first thinking. It is not a game or a flashy visual demo, but a structured interface where text, structure, and 3D space connect to support understanding.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+![Ariadna Screenshot](./public/screenshot.webp)
 
-## React Compiler
+## 📌 Current Features (MVP)
+- **3D Spatial Graph**: Nodes rendered in 3D space using WebGL.
+- **Node Interaction**: Click to select nodes (with raycasting feedback) and view details in a clear 2D DOM overlay.
+- **Node Creation**: Dynamic panel to create new nodes (assigns random colors from a palette and positions them automatically).
+- **Static Edges**: Clear visual 3D connections between nodes.
+- **Navigation**: Full spatial navigation (`OrbitControls` with Orbit, Pan, and Zoom) for smooth scene exploration.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠 Tech Stack
+- **React** + **TypeScript**
+- **Vite** (Build Tool)
+- **Three.js** + **@react-three/fiber** + **@react-three/drei** (3D Rendering Engine)
+- **Vanilla CSS** (Clean, minimal visual language)
 
-## Expanding the ESLint configuration
+## 🚀 How to Run Locally
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+2. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+3. **Open the app**:
+   Navigate to `http://localhost:5173` in your browser.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🗺 Architecture Philosophy
+- **Prototype first**: Focus on minimal, testable feature slices.
+- **Clear Separation**: `Scene.tsx` handles pure 3D rendering (stateless component). `App.tsx` manages the global React state. DOM UI (`NodeCard`, `NodeCreator`) acts as an overlay over the WebGL canvas.
+- **Zero bloat**: No heavy abstractions, no unnecessary dependencies. Keep files modular and readable.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+*Ariadna — your thread through the labyrinth of thoughts.*
